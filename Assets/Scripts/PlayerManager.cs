@@ -2,22 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private ChildPosition playerPrefab;
-    [SerializeField] QueueManager queueManager;
     [SerializeField] GameObject playerManagerDeactive;
     [SerializeField] GameObject playerGridSystem;
     public int xSize, ySize;
+    List<ChildPosition> activeChild = new List<ChildPosition>();
+    List<Tuple<int, int>> activeChildPos = new List<Tuple<int, int>>();
+    Dictionary<Tuple<int, int>, ChildPosition> activeDic = new Dictionary<Tuple<int, int>, ChildPosition>();
+
     private void Start() {
         CreatePlayer();
-        queueManager.ReadyToQueue();
     }
+
+    public ChildPosition Neighbor(int PosX, int PosY)
+    {
+        if(activeDic.TryGetValue(new Tuple<int, int>(PosX,PosY), out ChildPosition child))
+            return child;
+        return null;
+    }
+
     private void CreatePlayer()
     {
         var instantiatedParent = Instantiate(playerGridSystem, this.transform.position, Quaternion.identity);
-        float spriteSize=1;
+        float spriteSize= 1f;
         Vector2 startPos = instantiatedParent.transform.position;
         for (int x = 0; x < xSize; x++)
         {
@@ -26,11 +37,13 @@ public class PlayerManager : MonoBehaviour
                 ChildPosition tile = Instantiate(playerPrefab);
                 tile.transform.position = new Vector2(startPos.x +  spriteSize * x, startPos.y + spriteSize * y);
                 tile.transform.parent = instantiatedParent.transform;
-                tile.posX = ((int)tile.transform.localPosition.x);
-                tile.posY = ((int)tile.transform.localPosition.y);
+                tile.posX = (int)Math.Round(tile.transform.localPosition.x);
+                tile.posY = (int)Math.Round(tile.transform.localPosition.y);
                 tile.hasNeighbor = true;
-                queueManager.SetToItemList(tile);
-                queueManager.SetToActiveList(tile.posX,tile.posY, tile.hasNeighbor);
+                tile.PlayerManager = this;
+                activeChild.Add(tile);
+                activeChildPos.Add(new Tuple<int, int>(tile.posX, tile.posY));
+                activeDic.Add(new Tuple<int, int>(tile.posX, tile.posY), tile);
             }
         }
     }
@@ -42,20 +55,17 @@ public class PlayerManager : MonoBehaviour
             
             if (collider != null)
             {
-                int x = collider.transform.parent.GetComponent<ChildPosition>().posX;
-                int y = collider.transform.parent.GetComponent<ChildPosition>().posY;
-                bool z = collider.transform.parent.GetComponent<ChildPosition>().hasNeighbor;
-                queueManager.RemoveFromActiveList(x, y, z);
+                var temp = collider.transform.parent.GetComponent<ChildPosition>();
+                temp.NeighborControl();
                 collider.transform.parent.transform.parent = playerManagerDeactive.transform;
                 collider.transform.parent.gameObject.SetActive(false);
             }
         }
-        if(Input.GetKeyDown(KeyCode.F))
+        if(Input.GetKeyDown(KeyCode.A))
         {
-            List<Tuple<int, int, bool>> act = queueManager.GetActiveList();
-            foreach (var item in act)
+            foreach(var item in activeDic)
             {
-                Debug.Log(item.Item1 + " " + item.Item2 + " " + item.Item3);
+                Debug.Log(item);
             }
         }
     }
