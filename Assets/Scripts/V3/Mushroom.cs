@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Mushroom : MonoBehaviour
 {
-    [SerializeField] public MushroomManager MushroomManager;
+    Dictionary<Tuple<int, int>, MushBud> activeDic = new Dictionary<Tuple<int, int>, MushBud>();
+
+
     void Start()
     {
         
