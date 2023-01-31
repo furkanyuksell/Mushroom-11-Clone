@@ -126,7 +126,7 @@ public class QueueManager : MonoBehaviour
         var instantiatedParent = Instantiate(playerGridSystem, this.transform.position, Quaternion.identity);
         foreach (var item in objectList)
         {
-            if(empty.Contains(new Tuple<int, int, bool>(item.posX, item.posY, item.hasNeighbor)))
+            if(empty.Contains(new Tuple<int, int, bool>(item.posX, item.posY, item.register)))
             {
                 item.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
                 item.transform.parent = instantiatedParent.transform;

@@ -127,9 +127,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   posX: 0
   posY: 0
-  hasNeighbor: 0
+  register: 0
   PlayerManager: {fileID: 0}
   sprite: {fileID: 924433486803497286}
+  playerBase: {fileID: 6245484694620702373, guid: 30a895dffa03a4ee3b57c61062b467d5, type: 3}
 --- !u!1 &7945549950365211006
 GameObject:
   m_ObjectHideFlags: 0

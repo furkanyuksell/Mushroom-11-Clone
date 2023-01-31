@@ -10,8 +10,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject playerManagerDeactive;
     [SerializeField] GameObject playerGridSystem;
     public int xSize, ySize;
-    List<ChildPosition> activeChild = new List<ChildPosition>();
-    List<Tuple<int, int>> activeChildPos = new List<Tuple<int, int>>();
     Dictionary<Tuple<int, int>, ChildPosition> activeDic = new Dictionary<Tuple<int, int>, ChildPosition>();
 
     private void Start() {
@@ -39,10 +37,8 @@ public class PlayerManager : MonoBehaviour
                 tile.transform.parent = instantiatedParent.transform;
                 tile.posX = (int)Math.Round(tile.transform.localPosition.x);
                 tile.posY = (int)Math.Round(tile.transform.localPosition.y);
-                tile.hasNeighbor = true;
+                tile.register = false;
                 tile.PlayerManager = this;
-                activeChild.Add(tile);
-                activeChildPos.Add(new Tuple<int, int>(tile.posX, tile.posY));
                 activeDic.Add(new Tuple<int, int>(tile.posX, tile.posY), tile);
             }
         }
@@ -56,6 +52,7 @@ public class PlayerManager : MonoBehaviour
             if (collider != null)
             {
                 var temp = collider.transform.parent.GetComponent<ChildPosition>();
+                activeDic.Remove(new Tuple<int, int>(temp.posX,temp.posY));
                 temp.NeighborControl();
                 collider.transform.parent.transform.parent = playerManagerDeactive.transform;
                 collider.transform.parent.gameObject.SetActive(false);
