@@ -13,9 +13,8 @@ public class MushroomManager : MonoBehaviour
 
     [SerializeField] GameObject mouseCircle;
 
-    public Dictionary<Tuple<int, int>, MushBud> activeDic = new Dictionary<Tuple<int, int>, MushBud>();
-    public Dictionary<Tuple<int, int>, MushBud> deactiveDic = new Dictionary<Tuple<int, int>, MushBud>();
-
+    public Dictionary<Vector2, MushBud> activeDic = new Dictionary<Vector2, MushBud>();
+    public Dictionary<Vector2, MushBud> deactiveDic = new Dictionary<Vector2, MushBud>();
 
     //actively use
     MushBud tempMushBud;
@@ -24,15 +23,15 @@ public class MushroomManager : MonoBehaviour
         CreatePlayer();
     }
 
-    public MushBud ActiveNeighbor(int PosX, int PosY)
+    public MushBud ActiveNeighbor(Vector2 vect)
     {
-        if(activeDic.TryGetValue(new Tuple<int, int>(PosX,PosY), out MushBud mushBud))
+        if(activeDic.TryGetValue(vect, out mushBud))
             return mushBud;
         return null;
     }
-    public MushBud DeactiveNeighbor(int PosX, int PosY)
+    public MushBud DeactiveNeighbor(Vector2 vect)
     {
-        if (deactiveDic.TryGetValue(new Tuple<int, int>(PosX, PosY), out MushBud mushBud))
+        if (deactiveDic.TryGetValue(vect, out MushBud mushBud))
             return mushBud;
         return null;
     }
@@ -50,10 +49,9 @@ public class MushroomManager : MonoBehaviour
                 tile.MushroomManager = this;
                 tile.transform.position = new Vector2(startPos.x +  spriteSize * x, startPos.y + spriteSize * y);
                 tile.transform.parent = instantiatedParent.transform;
-                tile.posX = (int)Math.Round(tile.transform.localPosition.x);
-                tile.posY = (int)Math.Round(tile.transform.localPosition.y);
+                tile.budPos = tile.transform.localPosition;
                 tile.register = false;
-                activeDic.Add(new Tuple<int, int>(tile.posX, tile.posY), tile);
+                activeDic.Add(tile.budPos, tile);
             }
         }
     }

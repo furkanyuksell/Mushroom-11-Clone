@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class MushBud : MonoBehaviour
 {
-    public int posX;
-    public int posY;
+    public Vector2 budPos;
     public bool register;
     Dictionary<MushBud, int> neighList = new Dictionary<MushBud, int>();
     public MushroomManager MushroomManager;
     MushBud tempMushBud;
     bool isTriggered = true;
-    private void Update()
+
+
+    /*private void Update()
     {
         if ((tempMushBud = MushroomManager.DeactiveNeighbor(posX - 1, posY)) && isTriggered)
         {
@@ -39,12 +40,23 @@ public class MushBud : MonoBehaviour
             isTriggered = false;
 
         }
-    }
+    }*/
 
-    void GetParentMushroom()
+    void NeighControl()
     {
         
     }
+
+    private void OnEnable()
+    {
+        Destroyer.OnNeighborTrigger += NeighControl;
+    }
+
+    private void OnDisable()
+    {
+        Destroyer.OnNeighborTrigger -= NeighControl;   
+    }
+
 
     public void TriggerMushBud()
     {
