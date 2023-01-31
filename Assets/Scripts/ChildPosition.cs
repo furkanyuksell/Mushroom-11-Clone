@@ -14,75 +14,86 @@ public class ChildPosition : MonoBehaviour
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] GameObject playerBase;
     bool isDivided = false;
-    bool keepKey = true;
+    bool dofalseWhenNeedNew = true;
     /// <summary>
     ///
-    ///  neighList NameKey posVal upleftright
+    ///  neighList NameKey posVal upleftright   
     ///
     /// 
     /// </summary>
     public void NeighborControl()
     {
+        GameObject instantiatedParent;
         neighList.Clear();
         ChildPosition neigh;
         if (neigh = PlayerManager.Neighbor(posX - 1, posY))
         {
             // key left
-            if (keepKey)
+            if (dofalseWhenNeedNew)
             {
                 neigh.RecursiveFloodFill(1, neighList, neigh, null);
 
             }
             else
             {
-                var instantiatedParent = Instantiate(playerBase, this.transform.position, Quaternion.identity);
+                instantiatedParent = Instantiate(playerBase, this.transform.position, Quaternion.identity);
                 neigh.RecursiveFloodFill(1, neighList, neigh, instantiatedParent);
+                if (instantiatedParent.transform.childCount == 0)
+                    Destroy(instantiatedParent);
             }
         }
 
         if (neigh = PlayerManager.Neighbor(posX + 1, posY))
         {
             //key right
-            if (keepKey)
+            if (dofalseWhenNeedNew)
             {
                 neigh.RecursiveFloodFill(2, neighList, neigh, null);
 
             }
             else
             {
-                var instantiatedParent = Instantiate(playerBase, this.transform.position, Quaternion.identity);
+                instantiatedParent = Instantiate(playerBase, this.transform.position, Quaternion.identity);
                 neigh.RecursiveFloodFill(2, neighList, neigh, instantiatedParent);
+                if (instantiatedParent.transform.childCount == 0)
+                    Destroy(instantiatedParent);
             }
         }
 
         if (neigh = PlayerManager.Neighbor(posX, posY - 1))
         {
             //key down
-            if (keepKey)
+            if (dofalseWhenNeedNew)
             {
                 neigh.RecursiveFloodFill(3, neighList, neigh, null);
             }
             else
             {
-                var instantiatedParent = Instantiate(playerBase, this.transform.position, Quaternion.identity);
+                instantiatedParent = Instantiate(playerBase, this.transform.position, Quaternion.identity);
                 neigh.RecursiveFloodFill(3, neighList, neigh, instantiatedParent);
+                if (instantiatedParent.transform.childCount == 0)
+                    Destroy(instantiatedParent);
             }
+
+
         }
 
         if (neigh = PlayerManager.Neighbor(posX, posY + 1))
         {
             //key up
-            if (keepKey)
+            if (dofalseWhenNeedNew)
             {
                 neigh.RecursiveFloodFill(4, neighList, neigh, null);
             }
             else
             {
-                var instantiatedParent = Instantiate(playerBase, this.transform.position, Quaternion.identity);
+                instantiatedParent = Instantiate(playerBase, this.transform.position, Quaternion.identity);
                 neigh.RecursiveFloodFill(4, neighList, neigh, instantiatedParent);
+                if (instantiatedParent.transform.childCount == 0)
+                    Destroy(instantiatedParent);
             }
         }
-        keepKey = true;
+        dofalseWhenNeedNew = true;
         foreach (KeyValuePair<ChildPosition, int> entry in neighList)
         {
             entry.Key.register = false;
@@ -95,7 +106,7 @@ public class ChildPosition : MonoBehaviour
     {
         if (!mainNeigh.register)
         {
-            keepKey = false;
+            dofalseWhenNeedNew = false;
             dict.Add(mainNeigh, key);
             mainNeigh.register = true;
             if (playerBase != null)

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4504787977437760700}
   - component: {fileID: 8854274739099219617}
   - component: {fileID: 640706053182899790}
+  - component: {fileID: -4900990449473219952}
   m_Layer: 0
   m_Name: PlayerGridSystem
   m_TagString: Untagged
@@ -76,3 +77,15 @@ CompositeCollider2D:
     m_Paths: []
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
+--- !u!114 &-4900990449473219952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6245484694620702373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ee17e2d59f54a09869c4e3651adf7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
