@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 178693761}
   - component: {fileID: 178693764}
   m_Layer: 0
-  m_Name: PlayerManager
+  m_Name: MushroomManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,9 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aab3022f38a7a484f8d2f1b373d6a5f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 3932887379115463609, guid: a0c2fc5facf1cac4a9b60057ae576161, type: 3}
-  playerManagerDeactive: {fileID: 779028298}
-  playerGridSystem: {fileID: 6245484694620702373, guid: 30a895dffa03a4ee3b57c61062b467d5, type: 3}
+  mushBud: {fileID: -3128473386460216141, guid: a0c2fc5facf1cac4a9b60057ae576161, type: 3}
+  deactiveMushroom: {fileID: 779028298}
+  mushroomBase: {fileID: -8559294510901399906, guid: 30a895dffa03a4ee3b57c61062b467d5, type: 3}
   xSize: 25
   ySize: 25
 --- !u!1 &519420028
@@ -266,7 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 779028303}
   m_Layer: 0
-  m_Name: PlayerManagerDeactives
+  m_Name: DeactiveMushBud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChildControl : MonoBehaviour
+public class Mushroom : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] public MushroomManager MushroomManager;
     void Start()
     {
         
@@ -13,7 +13,6 @@ public class ChildControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (this.gameObject.transform.childCount == 0)
-            Destroy(this.gameObject);
+        
     }
 }

@@ -4,41 +4,45 @@ using UnityEngine;
 using System;
 using Unity.VisualScripting;
 
-public class PlayerManager : MonoBehaviour
+public class MushroomManager : MonoBehaviour
 {
-    [SerializeField] private ChildPosition playerPrefab;
-    [SerializeField] GameObject playerManagerDeactive;
-    [SerializeField] GameObject playerGridSystem;
+    [SerializeField] private MushBud mushBud;
+    [SerializeField] GameObject deactiveMushroom;
+    [SerializeField] Mushroom mushroomBase;
     public int xSize, ySize;
-    Dictionary<Tuple<int, int>, ChildPosition> activeDic = new Dictionary<Tuple<int, int>, ChildPosition>();
+    Dictionary<Tuple<int, int>, MushBud> activeDic = new Dictionary<Tuple<int, int>, MushBud>();
+
+
+    //actively use
+    MushBud tempMushBud;
 
     private void Start() {
         CreatePlayer();
     }
 
-    public ChildPosition Neighbor(int PosX, int PosY)
+    public MushBud Neighbor(int PosX, int PosY)
     {
-        if(activeDic.TryGetValue(new Tuple<int, int>(PosX,PosY), out ChildPosition child))
-            return child;
+        if(activeDic.TryGetValue(new Tuple<int, int>(PosX,PosY), out MushBud mushBud))
+            return mushBud;
         return null;
     }
 
     private void CreatePlayer()
     {
-        var instantiatedParent = Instantiate(playerGridSystem, this.transform.position, Quaternion.identity);
+        var instantiatedParent = Instantiate(mushroomBase, this.transform.position, Quaternion.identity);
+        instantiatedParent.MushroomManager = this;
         float spriteSize= 1f;
         Vector2 startPos = instantiatedParent.transform.position;
         for (int x = 0; x < xSize; x++)
         {
             for (int y = 0; y < ySize; y++)
             {
-                ChildPosition tile = Instantiate(playerPrefab);
+                MushBud tile = Instantiate(mushBud);
                 tile.transform.position = new Vector2(startPos.x +  spriteSize * x, startPos.y + spriteSize * y);
                 tile.transform.parent = instantiatedParent.transform;
                 tile.posX = (int)Math.Round(tile.transform.localPosition.x);
                 tile.posY = (int)Math.Round(tile.transform.localPosition.y);
                 tile.register = false;
-                tile.PlayerManager = this;
                 activeDic.Add(new Tuple<int, int>(tile.posX, tile.posY), tile);
             }
         }
@@ -51,19 +55,12 @@ public class PlayerManager : MonoBehaviour
             
             if (collider != null)
             {
-                var temp = collider.transform.parent.GetComponent<ChildPosition>();
-                activeDic.Remove(new Tuple<int, int>(temp.posX,temp.posY));
-                temp.NeighborControl();
-                collider.transform.parent.transform.parent = playerManagerDeactive.transform;
+                var temp = collider.transform.parent.GetComponent<MushBud>();
+                activeDic.Remove(new Tuple<int, int>(temp.posX,temp.posY));                
+                collider.transform.parent.transform.parent = deactiveMushroom.transform;
                 collider.transform.parent.gameObject.SetActive(false);
             }
         }
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            foreach(var item in activeDic)
-            {
-                Debug.Log(item);
-            }
-        }
+
     }
 }
