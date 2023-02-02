@@ -52,7 +52,6 @@ public class Mushroom : MonoBehaviour
         foreach (var item in activeDic)
         {
             item.Value.register = false;
-            item.Value.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
 
