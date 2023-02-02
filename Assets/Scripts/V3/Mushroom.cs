@@ -14,16 +14,11 @@ public class Mushroom : MonoBehaviour
 
     public void FloodFillNeighbor(Vector2 startPos)
     {
-        StartCoroutine(SlowFill(startPos));
-    }
-    IEnumerator SlowFill(Vector2 startPos)
-    {
         Queue<Vector2> queue = new Queue<Vector2>();
         queue.Enqueue(startPos);
 
         while (queue.Count > 0)
         {
-            yield return new WaitForSeconds(0.05f);
             Vector2 currentPos = queue.Dequeue();
             if (activeDic.TryGetValue(currentPos, out MushBud bud))
             {
@@ -53,9 +48,11 @@ public class Mushroom : MonoBehaviour
     }
     public void ChangeRegister()
     {
+        Debug.Log("calistimi");
         foreach (var item in activeDic)
         {
             item.Value.register = false;
+            item.Value.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
 
