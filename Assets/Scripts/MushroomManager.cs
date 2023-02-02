@@ -11,9 +11,6 @@ public class MushroomManager : MonoBehaviour
     [SerializeField] Mushroom mushroomBase;
     public int xSize, ySize;
 
-    [SerializeField] GameObject mouseCircle;
-
-    public Dictionary<Vector2, MushBud> activeDic = new Dictionary<Vector2, MushBud>();
     public Dictionary<Vector2, MushBud> deactiveDic = new Dictionary<Vector2, MushBud>();
 
     //actively use
@@ -22,36 +19,29 @@ public class MushroomManager : MonoBehaviour
     private void Start() {
         CreatePlayer();
     }
-
-    public MushBud ActiveNeighbor(Vector2 vect)
-    {
-        if(activeDic.TryGetValue(vect, out mushBud))
-            return mushBud;
-        return null;
-    }
     public MushBud DeactiveNeighbor(Vector2 vect)
     {
         if (deactiveDic.TryGetValue(vect, out MushBud mushBud))
             return mushBud;
         return null;
     }
-
     private void CreatePlayer()
     {
-        var instantiatedParent = Instantiate(mushroomBase, this.transform.position, Quaternion.identity);
+        var mushroom = Instantiate(mushroomBase, this.transform.position, Quaternion.identity);
         float spriteSize= 1f;
-        Vector2 startPos = instantiatedParent.transform.position;
+        Vector2 startPos = mushroom.transform.position;
         for (int x = 0; x < xSize; x++)
         {
             for (int y = 0; y < ySize; y++)
             {
                 MushBud tile = Instantiate(mushBud);
+                tile.mushroom = mushroom;
                 tile.MushroomManager = this;
                 tile.transform.position = new Vector2(startPos.x +  spriteSize * x, startPos.y + spriteSize * y);
-                tile.transform.parent = instantiatedParent.transform;
+                tile.transform.parent = mushroom.transform;
                 tile.budPos = tile.transform.localPosition;
                 tile.register = false;
-                activeDic.Add(tile.budPos, tile);
+                mushroom.AddBudToMushroom(tile);
             }
         }
     }

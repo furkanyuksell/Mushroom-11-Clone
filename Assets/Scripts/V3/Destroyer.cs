@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Destroyer : MonoBehaviour
 {
-    public static Action OnNeighborTrigger;
     Vector3 mouseWorldPos;
     [SerializeField] Camera mainCam;
     [SerializeField] MushroomManager mushroomManager;
@@ -18,15 +17,12 @@ public class Destroyer : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.GetMask("HitTrigger"))
-        {
-
-        }
-        var temp = collision.transform.parent.GetComponent<MushBud>();
-        Debug.Log(temp.budPos);
-        OnNeighborTrigger?.Invoke();
+        var temp = collision.transform.GetComponent<MushBud>();
+        temp.DestroyedBud();
         mushroomManager.deactiveDic.Add(temp.budPos, temp);
-        collision.transform.parent.transform.parent = mushroomManager.deactiveMushroom.transform;
-        collision.transform.parent.gameObject.SetActive(false);
+        temp.register = false;
+        collision.transform.parent = mushroomManager.deactiveMushroom.transform;
+        collision.transform.gameObject.SetActive(false);
+
     }
 }

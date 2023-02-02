@@ -6,61 +6,14 @@ public class MushBud : MonoBehaviour
 {
     public Vector2 budPos;
     public bool register;
-    Dictionary<MushBud, int> neighList = new Dictionary<MushBud, int>();
     public MushroomManager MushroomManager;
-    MushBud tempMushBud;
-    bool isTriggered = true;
+    public Mushroom mushroom;
 
-
-    /*private void Update()
+    public void DestroyedBud()
     {
-        if ((tempMushBud = MushroomManager.DeactiveNeighbor(posX - 1, posY)) && isTriggered)
-        {
-            Debug.Log(posX + "," + posY+"|Budın sol tarafı yok oldu");
-            isTriggered = false;
-        }
-
-        if ((tempMushBud = MushroomManager.DeactiveNeighbor(posX + 1, posY)) && isTriggered)
-        {
-            Debug.Log(posX + "," + posY + "|Budın sağ tarafı yok oldu");
-            isTriggered = false;
-
-        }
-
-        if ((tempMushBud = MushroomManager.DeactiveNeighbor(posX, posY - 1)) && isTriggered)
-        {
-            Debug.Log(posX + "," + posY + "|Budın ust tarafı yok oldu");
-            isTriggered = false;
-
-        }
-
-        if ((tempMushBud = MushroomManager.DeactiveNeighbor(posX, posY + 1)) && isTriggered)
-        {
-            Debug.Log(posX + "," + posY + "|Budın alt tarafı yok oldu");
-            isTriggered = false;
-
-        }
-    }*/
-
-    void NeighControl()
-    {
-        
+        mushroom.FloodFillNeighbor(budPos);
+        mushroom.ChangeRegister();
     }
 
-    private void OnEnable()
-    {
-        Destroyer.OnNeighborTrigger += NeighControl;
-    }
-
-    private void OnDisable()
-    {
-        Destroyer.OnNeighborTrigger -= NeighControl;   
-    }
-
-
-    public void TriggerMushBud()
-    {
-
-    }
 
 }
