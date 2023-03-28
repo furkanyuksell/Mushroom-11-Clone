@@ -12,8 +12,12 @@ public class MushBud : MonoBehaviour
     public void DestroyedBud()
     {
         mushroom.FloodFillNeighbor(budPos);
-        mushroom.ChangeRegister();
+        //mushroom.ChangeRegister();
     }
 
+    public void ItsDeadNow()
+    {
+        mushroom.RemoveFromActives(budPos);
+    }
 
 }

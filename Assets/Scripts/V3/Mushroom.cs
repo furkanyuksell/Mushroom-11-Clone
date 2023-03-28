@@ -17,14 +17,15 @@ public class Mushroom : MonoBehaviour
     {
         Queue<Vector2> queue = new Queue<Vector2>();
         queue.Enqueue(startPos);
-
+        int counter = 0;
         while (queue.Count > 0)
         {
             Vector2 currentPos = queue.Dequeue();
             if (activeDic.TryGetValue(currentPos, out MushBud bud))
             {
                 if (!bud.register)
-                {
+                {   
+                    counter++;  
                     bud.GetComponent<SpriteRenderer>().color = Color.red;
                     bud.register = true;
                     Vector2[] neighbors = new Vector2[]
@@ -43,45 +44,21 @@ public class Mushroom : MonoBehaviour
                         }
                     }
                 }
+                else
+                {
+                    activeDic.Remove(bud.budPos);
+                }
             }
         }
-        activeDic.Remove(startPos);
+        Debug.Log("counter " + counter + " / activeDic " + activeDic.Count);
+
+        if(activeDic.ContainsKey(startPos))
+            activeDic.Remove(startPos);
     }
 
-    public void FloodFillNeigh(Vector2 startPos)
+    public void RemoveFromActives(Vector2 position)
     {
-        Queue<Tuple<Vector2, int>> neighQueue = new Queue<Tuple<Vector2, int>>();
-        neighQueue.Enqueue(new Tuple<Vector2, int>(startPos, 0));
-
-        while(neighQueue.Count > 0)
-        {
-            Tuple<Vector2, int> tuple = neighQueue.Dequeue();
-            Vector2 currentPos = tuple.Item1;
-            if (activeDic.TryGetValue(currentPos, out MushBud bud))
-            {
-                if (!bud.register)
-                {
-                    bud.register = true;
-                    List<Tuple<Vector2, int>> neighbors = new List<Tuple<Vector2, int>>
-                    {
-                        new Tuple<Vector2, int>(new Vector2(currentPos.x - 1, currentPos.y), 1),
-                        new Tuple<Vector2, int>(new Vector2(currentPos.x + 1, currentPos.y), 2),
-                        new Tuple<Vector2, int>(new Vector2(currentPos.x, currentPos.y - 1), 3),
-                        new Tuple<Vector2, int>(new Vector2(currentPos.x, currentPos.y + 1), 4)
-                    };
-
-
-                    foreach (var neighbor in neighbors)
-                    {
-                        if (activeDic.ContainsKey(neighbor.Item1))
-                        {
-                            neighQueue.Enqueue(new Tuple<Vector2, int>(neighbor.Item1, neighbor.Item2));
-                        }
-                    }
-                }
-                
-            }
-        }
+        activeDic.Remove(position);
     }
 
     public void ChangeRegister()

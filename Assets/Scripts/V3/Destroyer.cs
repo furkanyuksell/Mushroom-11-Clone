@@ -8,6 +8,7 @@ public class Destroyer : MonoBehaviour
     Vector3 mouseWorldPos;
     [SerializeField] Camera mainCam;
     [SerializeField] MushroomManager mushroomManager;
+    MushBud _activeMushBud;
     private void LateUpdate()
     {
         mouseWorldPos = mainCam.ScreenToWorldPoint(Input.mousePosition);
@@ -15,14 +16,38 @@ public class Destroyer : MonoBehaviour
         transform.position = mouseWorldPos;
     }
 
+    float cooldown = 0.2f;
+    bool hasNewKil = false;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var temp = collision.transform.GetComponent<MushBud>();
-        temp.DestroyedBud();
-        mushroomManager.deactiveDic.Add(temp.budPos, temp);
-        temp.register = false;
-        collision.transform.parent = mushroomManager.deactiveMushroom.transform;
-        collision.transform.gameObject.SetActive(false);
+        if (collision.TryGetComponent<MushBud>(out MushBud mushBud))
+        {
+            hasNewKil = true;
+            cooldown = 0.2f;
+            _activeMushBud = mushBud;
+
+            mushBud.register = true;
+            mushroomManager.deactiveDic.Add(mushBud.budPos, mushBud);
+            mushBud.transform.parent = mushroomManager.deactiveMushroom.transform;
+            mushBud.transform.gameObject.SetActive(false);
+        }
 
     }
+    
+
+    private void Update()
+    {
+        if(hasNewKil)
+        {
+            cooldown -= Time.deltaTime;
+            if (cooldown <= 0)
+            {
+                _activeMushBud.DestroyedBud();
+                hasNewKil = false;
+                cooldown = .2f;
+            }
+        }
+    }
+
 }
