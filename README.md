@@ -22,7 +22,8 @@
 
 <br/>
 
-
+## In version 3, I will focus more on destruction and try to create an optimized, stable destruction
+## Afterwards, I will continue my work on the growth phase by adding the destroyed cubes back.
 
 not finished yet
 
